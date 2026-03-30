@@ -22,7 +22,7 @@
             <!-- File selection -->
             <Button Command="{Binding SelectFileCommand}" HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center" Padding="16,12" CornerRadius="8"
-                    Classes="accent">
+                    Classes="accent" DragDrop.AllowDrop="True">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <PathIcon Data="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"
                               Width="18" Height="18"/>

@@ -5,9 +5,9 @@ using PDFree.ViewModels;
 
 namespace PDFree.Views;
 
-public partial class CompressView : UserControl
+public partial class RotateView : UserControl
 {
-    public CompressView()
+    public RotateView()
     {
         InitializeComponent();
         AddHandler(DragDrop.DropEvent, OnDrop);
@@ -23,7 +23,7 @@ public partial class CompressView : UserControl
 
     private void OnDrop(object? sender, DragEventArgs e)
     {
-        if (DataContext is not CompressViewModel vm) return;
+        if (DataContext is not RotateViewModel vm) return;
         if (!e.DataTransfer.Contains(DataFormat.File)) return;
 
         var files = e.DataTransfer.TryGetFiles();
@@ -37,7 +37,6 @@ public partial class CompressView : UserControl
                 path.EndsWith(".pdf", System.StringComparison.OrdinalIgnoreCase))
             {
                 vm.SelectedFile = path;
-                vm.OriginalSize = new System.IO.FileInfo(path).Length;
                 break;
             }
         }

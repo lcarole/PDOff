@@ -53,6 +53,12 @@ public partial class HomeViewModel : ViewModelBase
             Lang["ToolCompressDesc"],
             StreamGeometry.Parse("M8 11h3v10h2V11h3l-4-4-4 4zM4 3v2h16V3H4z"),
             Color.Parse("#FF9800")));
+
+        Tools.Add(new("rotate",
+            Lang["ToolRotateTitle"],
+            Lang["ToolRotateDesc"],
+            StreamGeometry.Parse("M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-1.01.58-1.96 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.44-.51-.87-1.46-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-1-.14-1.95-.58-2.46-1.02L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z"),
+            Color.Parse("#9C27B0")));
     }
 
     [RelayCommand]
@@ -63,6 +69,7 @@ public partial class HomeViewModel : ViewModelBase
             "merge" => _services.GetRequiredService<MergeViewModel>(),
             "split" => _services.GetRequiredService<SplitViewModel>(),
             "compress" => _services.GetRequiredService<CompressViewModel>(),
+            "rotate" => _services.GetRequiredService<RotateViewModel>(),
             _ => this
         };
         _mainVm.NavigateTo(vm);

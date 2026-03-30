@@ -29,7 +29,8 @@
                     Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
                     BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
                     BorderThickness="1"
-                    IsVisible="{Binding Files.Count}">
+                    IsVisible="{Binding Files.Count}"
+                    DragDrop.AllowDrop="True">
                 <ListBox ItemsSource="{Binding Files}" SelectionMode="Single"
                          Background="Transparent">
                     <ListBox.ItemTemplate>
@@ -70,7 +71,8 @@
             <Border CornerRadius="8" Padding="32" MinHeight="150"
                     Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
                     BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                    BorderThickness="1" IsVisible="{Binding !Files.Count}">
+                    BorderThickness="1" IsVisible="{Binding !Files.Count}"
+                    DragDrop.AllowDrop="True">
                 <TextBlock Text="{Binding [MergeEmptyState], Source={x:Static services:Lang.Instance}}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            Opacity="0.5" TextWrapping="Wrap" TextAlignment="Center"/>

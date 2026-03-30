@@ -101,4 +101,25 @@
 
   <!-- Language -->
   <data name="Language" xml:space="preserve"><value>Langue</value></data>
+
+  <!-- Rotate View -->
+  <data name="ToolRotateTitle" xml:space="preserve"><value>Rotation</value></data>
+  <data name="ToolRotateDesc" xml:space="preserve"><value>Faire pivoter les pages d'un PDF.</value></data>
+  <data name="RotateTitle" xml:space="preserve"><value>Rotation de pages PDF</value></data>
+  <data name="RotateSubtitle" xml:space="preserve"><value>Faites pivoter une ou toutes les pages d'un fichier PDF.</value></data>
+  <data name="RotateSelectFile" xml:space="preserve"><value>Sélectionner un fichier PDF</value></data>
+  <data name="RotateAngleLabel" xml:space="preserve"><value>Angle de rotation</value></data>
+  <data name="Rotate90CW" xml:space="preserve"><value>90° (sens horaire)</value></data>
+  <data name="Rotate90CCW" xml:space="preserve"><value>90° (sens antihoraire)</value></data>
+  <data name="Rotate180" xml:space="preserve"><value>180°</value></data>
+  <data name="RotatePagesLabel" xml:space="preserve"><value>Pages à pivoter</value></data>
+  <data name="RotateAllPages" xml:space="preserve"><value>Toutes les pages</value></data>
+  <data name="RotatePageRange" xml:space="preserve"><value>Plage de pages (ex: 1-3, 5)</value></data>
+  <data name="RotateButton" xml:space="preserve"><value>Appliquer la rotation</value></data>
+  <data name="RotateDialogTitle" xml:space="preserve"><value>Sélectionner un fichier PDF</value></data>
+  <data name="RotateSaveTitle" xml:space="preserve"><value>Enregistrer le PDF pivoté</value></data>
+  <data name="RotateSuggestedSuffix" xml:space="preserve"><value>_pivoté</value></data>
+  <data name="RotateSuccess" xml:space="preserve"><value>Rotation appliquée !</value></data>
+  <data name="RotateAngleError" xml:space="preserve"><value>L'angle doit être un multiple de 90°.</value></data>
+  <data name="RotateError" xml:space="preserve"><value>Erreur lors de la rotation : {0}</value></data>
 </root>
