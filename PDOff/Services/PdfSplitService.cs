@@ -69,10 +69,10 @@ public class PdfSplitService : IPdfSplitService
             case SplitMode.PageRange:
                 if (string.IsNullOrWhiteSpace(pageRange))
                     throw new ArgumentException(Lang.Instance["SplitPageRangeRequired"]);
-                var pages = PageRangeParser.Parse(pageRange, totalPages);
-                if (pages.Count == 0)
+                var parsed = PageRangeParser.Parse(pageRange, totalPages);
+                if (parsed.Count == 0)
                     throw new ArgumentException(Lang.Instance["SplitPageRangeEmpty"]);
-                ranges.Add(pages);
+                ranges.Add(parsed);
                 break;
         }
 
