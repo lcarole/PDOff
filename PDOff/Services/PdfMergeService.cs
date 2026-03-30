@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using iText.Kernel.Pdf;
 using iText.Kernel.Utils;
 using PDOff.Models;
@@ -12,6 +13,12 @@ public class PdfMergeService : IPdfMergeService
     {
         if (inputPaths.Count < 2)
             return new PdfToolResult(false, ErrorMessage: Lang.Instance["MergeMinFiles"]);
+
+        foreach (var path in inputPaths)
+        {
+            if (!File.Exists(path))
+                return new PdfToolResult(false, ErrorMessage: string.Format(Lang.Instance["FileNotFound"], path));
+        }
 
         try
         {
@@ -30,7 +37,13 @@ public class PdfMergeService : IPdfMergeService
         }
         catch (Exception ex)
         {
+            TryDeleteFile(outputPath);
             return new PdfToolResult(false, ErrorMessage: string.Format(Lang.Instance["MergeError"], ex.Message));
         }
+    }
+
+    private static void TryDeleteFile(string path)
+    {
+        try { if (File.Exists(path)) File.Delete(path); } catch { }
     }
 }

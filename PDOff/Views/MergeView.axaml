@@ -8,6 +8,16 @@
              x:Class="PDOff.Views.MergeView"
              x:DataType="vm:MergeViewModel">
 
+    <UserControl.Styles>
+        <Style Selector="UserControl.dragging">
+            <Setter Property="Opacity" Value="0.7"/>
+        </Style>
+        <Style Selector="UserControl.dragging Border.drop-zone">
+            <Setter Property="BorderBrush" Value="#4CAF50"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+    </UserControl.Styles>
+
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
         <StackPanel Spacing="20" Margin="40,24" MaxWidth="700" HorizontalAlignment="Center">
             <!-- Title -->
@@ -30,7 +40,8 @@
                     BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
                     BorderThickness="1"
                     IsVisible="{Binding Files.Count}"
-                    DragDrop.AllowDrop="True">
+                    DragDrop.AllowDrop="True"
+                    Classes="drop-zone">
                 <ListBox ItemsSource="{Binding Files}" SelectionMode="Single"
                          Background="Transparent">
                     <ListBox.ItemTemplate>
@@ -72,7 +83,8 @@
                     Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
                     BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
                     BorderThickness="1" IsVisible="{Binding !Files.Count}"
-                    DragDrop.AllowDrop="True">
+                    DragDrop.AllowDrop="True"
+                    Classes="drop-zone">
                 <TextBlock Text="{Binding [MergeEmptyState], Source={x:Static services:Lang.Instance}}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            Opacity="0.5" TextWrapping="Wrap" TextAlignment="Center"/>
@@ -90,8 +102,14 @@
 
             <!-- Status message -->
             <Border CornerRadius="6" Padding="12,8" IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
-                           FontWeight="SemiBold"/>
+                <Panel>
+                    <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
+                               FontWeight="SemiBold" Foreground="#4CAF50"
+                               IsVisible="{Binding IsSuccess}"/>
+                    <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
+                               FontWeight="SemiBold" Foreground="#D32F2F"
+                               IsVisible="{Binding !IsSuccess}"/>
+                </Panel>
             </Border>
         </StackPanel>
     </ScrollViewer>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using iText.Kernel.Pdf;
 using PDOff.Models;
 
@@ -11,6 +12,9 @@ public class PdfRotateService : IPdfRotateService
     {
         if (angleDegrees % 90 != 0)
             return new PdfToolResult(false, ErrorMessage: Lang.Instance["RotateAngleError"]);
+
+        if (!File.Exists(inputPath))
+            return new PdfToolResult(false, ErrorMessage: string.Format(Lang.Instance["FileNotFound"], inputPath));
 
         try
         {
@@ -28,13 +32,14 @@ public class PdfRotateService : IPdfRotateService
                 if (pageNum < 1 || pageNum > total) continue;
                 var page = doc.GetPage(pageNum);
                 int current = page.GetRotation();
-                page.SetRotation((current + angleDegrees) % 360);
+                page.SetRotation(((current + angleDegrees) % 360 + 360) % 360);
             }
 
             return new PdfToolResult(true, outputPath);
         }
         catch (Exception ex)
         {
+            TryDeleteFile(outputPath);
             return new PdfToolResult(false, ErrorMessage: string.Format(Lang.Instance["RotateError"], ex.Message));
         }
     }
@@ -44,5 +49,10 @@ public class PdfRotateService : IPdfRotateService
         var list = new List<int>(total);
         for (int i = 1; i <= total; i++) list.Add(i);
         return list;
+    }
+
+    private static void TryDeleteFile(string path)
+    {
+        try { if (File.Exists(path)) File.Delete(path); } catch { }
     }
 }

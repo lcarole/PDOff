@@ -80,6 +80,8 @@
   <data name="SplitSuccess" xml:space="preserve"><value>Split successful! Files in: {0}</value></data>
   <data name="SplitError" xml:space="preserve"><value>Error during split: {0}</value></data>
   <data name="SplitPageRangeRequired" xml:space="preserve"><value>Page range is required for PageRange mode.</value></data>
+  <data name="SplitPageRangeEmpty" xml:space="preserve"><value>The page range contains no valid pages.</value></data>
+  <data name="StorageUnavailable" xml:space="preserve"><value>Unable to open the file picker.</value></data>
 
   <!-- Compress View -->
   <data name="CompressTitle" xml:space="preserve"><value>Compress a PDF</value></data>
@@ -122,4 +124,5 @@
   <data name="RotateSuccess" xml:space="preserve"><value>Rotation applied!</value></data>
   <data name="RotateAngleError" xml:space="preserve"><value>Angle must be a multiple of 90°.</value></data>
   <data name="RotateError" xml:space="preserve"><value>Error during rotation: {0}</value></data>
+  <data name="FileNotFound" xml:space="preserve"><value>File not found: {0}</value></data>
 </root>

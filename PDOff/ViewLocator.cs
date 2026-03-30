@@ -1,33 +1,32 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using PDOff.ViewModels;
+using PDOff.Views;
 
 namespace PDOff;
 
-/// <summary>
-/// Given a view model, returns the corresponding view if possible.
-/// </summary>
-[RequiresUnreferencedCode(
-    "Default implementation of ViewLocator involves reflection which may be trimmed away.",
-    Url = "https://docs.avaloniaui.net/docs/concepts/view-locator")]
 public class ViewLocator : IDataTemplate
 {
+    private static readonly Dictionary<Type, Func<Control>> ViewMap = new()
+    {
+        [typeof(HomeViewModel)] = () => new HomeView(),
+        [typeof(MergeViewModel)] = () => new MergeView(),
+        [typeof(SplitViewModel)] = () => new Views.SplitView(),
+        [typeof(CompressViewModel)] = () => new CompressView(),
+        [typeof(RotateViewModel)] = () => new RotateView(),
+    };
+
     public Control? Build(object? param)
     {
         if (param is null)
             return null;
-        
-        var name = param.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
-        var type = Type.GetType(name);
 
-        if (type != null)
-        {
-            return (Control)Activator.CreateInstance(type)!;
-        }
-        
-        return new TextBlock { Text = "Not Found: " + name };
+        if (ViewMap.TryGetValue(param.GetType(), out var factory))
+            return factory();
+
+        return new TextBlock { Text = "Not Found: " + param.GetType().FullName };
     }
 
     public bool Match(object? data)

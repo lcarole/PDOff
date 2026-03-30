@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using iText.Kernel.Pdf;
 using PDOff.Models;
 
@@ -8,6 +9,9 @@ public class PdfCompressService : IPdfCompressService
 {
     public PdfToolResult Compress(string inputPath, string outputPath, CompressionLevel level)
     {
+        if (!File.Exists(inputPath))
+            return new PdfToolResult(false, ErrorMessage: string.Format(Lang.Instance["FileNotFound"], inputPath));
+
         try
         {
             var writerProperties = new WriterProperties();
@@ -15,10 +19,10 @@ public class PdfCompressService : IPdfCompressService
             switch (level)
             {
                 case CompressionLevel.Low:
-                    writerProperties.SetCompressionLevel(CompressionConstants.DEFAULT_COMPRESSION);
+                    writerProperties.SetCompressionLevel(CompressionConstants.BEST_SPEED);
                     break;
                 case CompressionLevel.Medium:
-                    writerProperties.SetCompressionLevel(CompressionConstants.BEST_SPEED);
+                    writerProperties.SetCompressionLevel(CompressionConstants.DEFAULT_COMPRESSION);
                     writerProperties.SetFullCompressionMode(true);
                     break;
                 case CompressionLevel.High:
@@ -34,7 +38,6 @@ public class PdfCompressService : IPdfCompressService
 
             srcDoc.CopyPagesTo(1, srcDoc.GetNumberOfPages(), destDoc);
 
-            // Remove unused objects and metadata for higher compression
             if (level >= CompressionLevel.Medium)
             {
                 var info = destDoc.GetDocumentInfo();
@@ -46,7 +49,13 @@ public class PdfCompressService : IPdfCompressService
         }
         catch (Exception ex)
         {
+            TryDeleteFile(outputPath);
             return new PdfToolResult(false, ErrorMessage: string.Format(Lang.Instance["CompressError"], ex.Message));
         }
+    }
+
+    private static void TryDeleteFile(string path)
+    {
+        try { if (File.Exists(path)) File.Delete(path); } catch { }
     }
 }

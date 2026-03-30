@@ -1,16 +1,14 @@
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PDOff.Models;
 using PDOff.Services;
 
 namespace PDOff.ViewModels;
 
 public partial class SplitViewModel : ViewModelBase
 {
-    private readonly MainWindowViewModel _mainVm;
     private readonly IPdfSplitService _splitService;
 
     [ObservableProperty]
@@ -36,9 +34,8 @@ public partial class SplitViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isSuccess;
 
-    public SplitViewModel(MainWindowViewModel mainVm, IPdfSplitService splitService)
+    public SplitViewModel(IPdfSplitService splitService)
     {
-        _mainVm = mainVm;
         _splitService = splitService;
     }
 
@@ -67,7 +64,12 @@ public partial class SplitViewModel : ViewModelBase
         if (SelectedFile is null) return;
 
         var storageProvider = GetStorageProvider();
-        if (storageProvider is null) return;
+        if (storageProvider is null)
+        {
+            IsSuccess = false;
+            StatusMessage = Lang.Instance["StorageUnavailable"];
+            return;
+        }
 
         var folders = await storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
@@ -96,12 +98,5 @@ public partial class SplitViewModel : ViewModelBase
         {
             IsBusy = false;
         }
-    }
-
-    private static IStorageProvider? GetStorageProvider()
-    {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            return desktop.MainWindow?.StorageProvider;
-        return null;
     }
 }

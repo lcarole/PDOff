@@ -12,6 +12,8 @@ public partial class RotateView : UserControl
         InitializeComponent();
         AddHandler(DragDrop.DropEvent, OnDrop);
         AddHandler(DragDrop.DragOverEvent, OnDragOver);
+        AddHandler(DragDrop.DragEnterEvent, OnDragEnter);
+        AddHandler(DragDrop.DragLeaveEvent, OnDragLeave);
     }
 
     private void OnDragOver(object? sender, DragEventArgs e)
@@ -21,8 +23,20 @@ public partial class RotateView : UserControl
             : DragDropEffects.None;
     }
 
+    private void OnDragEnter(object? sender, DragEventArgs e)
+    {
+        if (e.DataTransfer.Contains(DataFormat.File))
+            Classes.Add("dragging");
+    }
+
+    private void OnDragLeave(object? sender, DragEventArgs e)
+    {
+        Classes.Remove("dragging");
+    }
+
     private void OnDrop(object? sender, DragEventArgs e)
     {
+        Classes.Remove("dragging");
         if (DataContext is not RotateViewModel vm) return;
         if (!e.DataTransfer.Contains(DataFormat.File)) return;
 

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using iText.Kernel.Pdf;
+using PDOff.Helpers;
 using PDOff.Models;
 
 namespace PDOff.Services;
@@ -11,6 +11,9 @@ public class PdfSplitService : IPdfSplitService
 {
     public PdfToolResult Split(string inputPath, string outputDirectory, SplitMode mode, int everyN = 1, string? pageRange = null)
     {
+        if (!File.Exists(inputPath))
+            return new PdfToolResult(false, ErrorMessage: string.Format(Lang.Instance["FileNotFound"], inputPath));
+
         try
         {
             Directory.CreateDirectory(outputDirectory);
@@ -66,36 +69,13 @@ public class PdfSplitService : IPdfSplitService
             case SplitMode.PageRange:
                 if (string.IsNullOrWhiteSpace(pageRange))
                     throw new ArgumentException(Lang.Instance["SplitPageRangeRequired"]);
-                ranges.Add(ParsePageRange(pageRange, totalPages));
+                var pages = PageRangeParser.Parse(pageRange, totalPages);
+                if (pages.Count == 0)
+                    throw new ArgumentException(Lang.Instance["SplitPageRangeEmpty"]);
+                ranges.Add(pages);
                 break;
         }
 
         return ranges;
-    }
-
-    private static List<int> ParsePageRange(string range, int totalPages)
-    {
-        var pages = new HashSet<int>();
-
-        foreach (var part in range.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-        {
-            if (part.Contains('-'))
-            {
-                var bounds = part.Split('-', 2);
-                if (int.TryParse(bounds[0].Trim(), out int start) && int.TryParse(bounds[1].Trim(), out int end))
-                {
-                    start = Math.Max(1, start);
-                    end = Math.Min(totalPages, end);
-                    for (int i = start; i <= end; i++)
-                        pages.Add(i);
-                }
-            }
-            else if (int.TryParse(part, out int page) && page >= 1 && page <= totalPages)
-            {
-                pages.Add(page);
-            }
-        }
-
-        return pages.OrderBy(p => p).ToList();
     }
 }

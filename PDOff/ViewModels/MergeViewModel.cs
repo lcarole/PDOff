@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,7 +10,6 @@ namespace PDOff.ViewModels;
 
 public partial class MergeViewModel : ViewModelBase
 {
-    private readonly MainWindowViewModel _mainVm;
     private readonly IPdfMergeService _mergeService;
 
     public ObservableCollection<string> Files { get; } = new();
@@ -27,9 +24,8 @@ public partial class MergeViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isSuccess;
 
-    public MergeViewModel(MainWindowViewModel mainVm, IPdfMergeService mergeService)
+    public MergeViewModel(IPdfMergeService mergeService)
     {
-        _mainVm = mainVm;
         _mergeService = mergeService;
         Files.CollectionChanged += (_, _) => MergeCommand.NotifyCanExecuteChanged();
     }
@@ -83,7 +79,12 @@ public partial class MergeViewModel : ViewModelBase
     private async Task Merge()
     {
         var storageProvider = GetStorageProvider();
-        if (storageProvider is null) return;
+        if (storageProvider is null)
+        {
+            IsSuccess = false;
+            StatusMessage = Lang.Instance["StorageUnavailable"];
+            return;
+        }
 
         var file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
@@ -112,12 +113,5 @@ public partial class MergeViewModel : ViewModelBase
         {
             IsBusy = false;
         }
-    }
-
-    private static IStorageProvider? GetStorageProvider()
-    {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            return desktop.MainWindow?.StorageProvider;
-        return null;
     }
 }
