@@ -16,6 +16,7 @@ vpk [win] pack \
     --packDir "$PUBLISH_DIR/app" \
     --mainExe "$APP_NAME.exe" \
     --outputDir "$PUBLISH_DIR/installer" \
-    --runtime "$RID"
+    --runtime "$RID" \
+    --channel win-x64
 
 echo "Done: $PUBLISH_DIR/installer"

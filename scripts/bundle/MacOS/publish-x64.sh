@@ -16,6 +16,7 @@ vpk [osx] pack \
     --packDir "$PUBLISH_DIR/app" \
     --mainExe "$APP_NAME" \
     --outputDir "$PUBLISH_DIR/installer" \
-    --runtime "$RID"
+    --runtime "$RID" \
+    --channel osx-x64
 
 echo "Done: $PUBLISH_DIR/installer"
